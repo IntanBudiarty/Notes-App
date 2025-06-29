@@ -27,17 +27,24 @@ class NoteItem extends HTMLElement {
       archiveBtn.removeEventListener('click', this.handleArchiveClick);
       archiveBtn.addEventListener('click', this.handleArchiveClick.bind(this));
     }}
-    handleArchiveClick() {
-      const id = this.getAttribute('id');
-      const isArchived = this.getAttribute('archived') === 'true';
-      
-      this.dispatchEvent(new CustomEvent('toggle-archive', {
-        bubbles: true,
-        composed: true,
-        detail: { 
-          id,
-          archived: isArchived // Kirim status saat ini, bukan yang baru
-        }
+   // Update the handleArchiveClick method
+  handleArchiveClick() {
+    const id = this.getAttribute('id');
+    const isArchived = this.getAttribute('archived') === 'true';
+    
+    console.log('Dispatching archive event:', { 
+      id, 
+      archived: isArchived,
+      newStatus: !isArchived // Add this for debugging
+    });
+    
+    this.dispatchEvent(new CustomEvent('toggle-archive', {
+      bubbles: true,
+      composed: true,
+      detail: { 
+        id,
+        archived: isArchived // Current status before toggling
+      }
     }));
   }
 

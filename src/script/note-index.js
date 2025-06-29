@@ -98,26 +98,35 @@ class NoteIndex extends HTMLElement {
       </div>
     `;
   }
-  async handleToggleArchive(event) {
-    const { id, archived } = event.detail;
-    this.showLoading();
-    try {
-      // Gunakan !archived karena kita ingin toggle status
-      await toggleNoteArchive(id, !archived);
+  // Update the handleToggleArchive method
+async handleToggleArchive(event) {
+  const { id, archived } = event.detail;
+  console.log('Received toggle event:', event.detail);
+  
+  this.showLoading();
+  try {
+    // Toggle the status (archive if not archived, unarchive if archived)
+    const success = await toggleNoteArchive(id, !archived);
+    
+    if (success) {
       this.showAlert(
         archived ? 'Catatan dikembalikan ke aktif' : 'Catatan diarsipkan', 
         'success'
       );
+      // Force reload with current filter
       await this.loadNotes();
-    } catch (error) {
-      console.error('Archive error:', error);
-      this.showAlert(
-        `Gagal ${archived ? 'mengembalikan' : 'mengarsipkan'} catatan`, 
-        'danger'
-      );
+    } else {
+      throw new Error('Toggle operation failed');
     }
-    this.hideLoading();
+  } catch (error) {
+    console.error('Archive error:', error);
+    this.showAlert(
+      `Gagal ${archived ? 'mengembalikan' : 'mengarsipkan'} catatan`, 
+      'danger'
+    );
   }
+  this.hideLoading();
+}
   async connectedCallback() {
     await this.loadNotes();
     this.setupEventListeners();
