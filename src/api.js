@@ -1,54 +1,81 @@
 const BASE_URL = '/api';
 
-async function fetchNotes(archived = false) {
-  const response = await fetch(`${BASE_URL}/notes?archived=${archived}`);
-  const { data } = await response.json();
-  return data;
+export async function toggleNoteArchive(id, shouldArchive) {
+  try {
+    const endpoint = shouldArchive ? 'archive' : 'unarchive';
+    const response = await fetch(`${BASE_URL}/notes/${id}/${endpoint}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    
+    if (!response.ok) {
+      throw new Error(shouldArchive ? 'Gagal mengarsipkan' : 'Gagal mengembalikan');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Toggle archive error:', error);
+    throw error;
+  }
 }
 
+async function fetchNotes(archived = false) {
+  try {
+    const response = await fetch(`${BASE_URL}/notes?archived=${archived}`);
+    if (!response.ok) throw new Error('Gagal memuat catatan');
+    const { data } = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Fetch notes error:', error);
+    throw error;
+  }
+}
 async function addNote({ title, body }) {
-  const response = await fetch(`${BASE_URL}/notes`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title, body }),
-  });
-  const { data } = await response.json();
-  return data;
+  try {
+    const response = await fetch(`${BASE_URL}/notes`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, body }),
+    });
+    if (!response.ok) throw new Error('Gagal menambahkan catatan');
+    const { data } = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Add note error:', error);
+    throw error;
+  }
 }
 
 async function deleteNote(id) {
-  await fetch(`${BASE_URL}/notes/${id}`, {
-    method: 'DELETE',
-  });
+  try {
+    const response = await fetch(`${BASE_URL}/notes/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) throw new Error('Gagal menghapus catatan');
+  } catch (error) {
+    console.error('Delete note error:', error);
+    throw error;
+  }
 }
+
 async function editNote(id, { title, body }) {
-  const response = await fetch(`${BASE_URL}/notes/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ title, body }),
-  });
-  if (!response.ok) throw new Error('Gagal memperbarui catatan');
-  
-  return await response.json();
+  try {
+    const response = await fetch(`${BASE_URL}/notes/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, body }),
+    });
+    if (!response.ok) throw new Error('Gagal memperbarui catatan');
+    return await response.json();
+  } catch (error) {
+    console.error('Edit note error:', error);
+    throw error;
+  }
 }
 
-
-async function archiveNote(id) {
-  const response = await fetch(`${BASE_URL}/notes/${id}/archive`, {
-    method: 'POST',
-  });
-  if (!response.ok) throw new Error('Gagal mengarsipkan');
-  return await response.json();
-}
-
-async function unarchiveNote(id) {
-  const response = await fetch(`${BASE_URL}/notes/${id}/unarchive`, {
-    method: 'POST',
-  });
-  if (!response.ok) throw new Error('Gagal mengembalikan');
-  return await response.json();
-}
-
-export { fetchNotes, addNote, deleteNote, archiveNote, unarchiveNote, editNote };
+export {
+  fetchNotes,
+  addNote,
+  deleteNote,
+  editNote,
+};
