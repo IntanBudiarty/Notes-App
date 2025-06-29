@@ -207,13 +207,22 @@ class NoteItem extends HTMLElement {
       }
     });
 
-    this.shadowRoot.querySelector('.archive-btn').addEventListener('click', () => {
-      this.dispatchEvent(new CustomEvent('toggle-archive', {
-        bubbles: true,
-        composed: true,
-        detail: { id, archived: isArchived }
-      }));
-    });
+    // In your connectedCallback or setupEventListeners
+  this.shadowRoot.querySelector('.archive-btn').addEventListener('click', () => {
+    const id = this.getAttribute('id');
+    const isArchived = this.getAttribute('archived') === 'true';
+    
+    console.log(`Attempting to ${isArchived ? 'unarchive' : 'archive'} note:`, id);
+    
+    this.dispatchEvent(new CustomEvent('toggle-archive', {
+      bubbles: true,
+      composed: true,
+      detail: { 
+        id,
+        archived: isArchived
+      }
+    }));
+  });
   }
 }
 

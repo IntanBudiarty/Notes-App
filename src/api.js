@@ -4,12 +4,16 @@ export async function toggleNoteArchive(id, shouldArchive) {
   try {
     const endpoint = shouldArchive ? 'archive' : 'unarchive';
     const response = await fetch(`${BASE_URL}/notes/${id}/${endpoint}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'POST', // Dicoding API uses POST for archive/unarchive
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}` // Add if needed
+      },
     });
     
     if (!response.ok) {
-      throw new Error(shouldArchive ? 'Gagal mengarsipkan' : 'Gagal mengembalikan');
+      const errorData = await response.json();
+      throw new Error(errorData.message || (shouldArchive ? 'Gagal mengarsipkan' : 'Gagal mengembalikan'));
     }
     
     return await response.json();
@@ -19,12 +23,23 @@ export async function toggleNoteArchive(id, shouldArchive) {
   }
 }
 
-async function fetchNotes(archived = false) {
+// Updated fetchNotes to match Dicoding API
+export async function fetchNotes(archived = false) {
   try {
-    const response = await fetch(`${BASE_URL}/notes?archived=${archived}`);
-    if (!response.ok) throw new Error('Gagal memuat catatan');
+    const endpoint = archived ? 'notes/archived' : 'notes';
+    const response = await fetch(`${BASE_URL}/${endpoint}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}` // Add if needed
+      }
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Gagal memuat catatan');
+    }
+    
     const { data } = await response.json();
-    return data;
+    return data.notes || data; // Handle different response formats
   } catch (error) {
     console.error('Fetch notes error:', error);
     throw error;
@@ -74,7 +89,6 @@ async function editNote(id, { title, body }) {
 }
 
 export {
-  fetchNotes,
   addNote,
   deleteNote,
   editNote,
