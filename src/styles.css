@@ -1,0 +1,143 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+body.dark-mode {
+  background: #222;
+  color: rgb(3, 3, 3);
+}
+
+body {
+  background-color: #f4f4f4;
+  color: #333;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  background-color: #23402f;
+  color: white;
+  padding: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+main {
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+form {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+form h3 {
+  text-align: center;
+  color: #382ecc;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+textarea {
+  resize: none;
+  height: 100px;
+}
+
+small {
+  font-size: 12px;
+  color: gray;
+  text-align: right;
+}
+
+button {
+  background-color: #382ecc;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #382ecc;
+}
+
+#notes-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.note:hover {
+  transform: scale(1.02);
+}
+note-item {
+  display: block;
+  background: #e6f2e6;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.note h3 {
+  color: #382ecc;
+}
+
+.note p {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.date {
+  font-size: 12px;
+  color: gray;
+}
+
+.edit-btn {
+  background-color: #ebe408;
+}
+
+.edit-btn:hover {
+  background-color: #ebe408;
+}
+
+.delete-btn {
+  background-color: #ca1b08;
+}
+
+.delete-btn:hover {
+  background-color: #ca1b08;
+}
+
+.edit-btn,
+.delete-btn {
+  display: inline-block;
+  width: 48%;
+  margin-top: 10px;
+}

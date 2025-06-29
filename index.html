@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NoteApp</title>
+  </head>
+  <body>
+    <main>
+      <div id="alert-container" class="my-3"></div>
+      <theme-app></theme-app>
+      <div class="filter-toggle">
+        <button id="show-active">Catatan Aktif</button>
+        <button id="show-archived">Catatan Arsip</button>
+      </div>
+      <note-form></note-form>
+      <div id="notes-container"></div>
+
+     
+      <div id="loading-indicator" style="display: none">Loading...</div>
+    </main>
+    <script src="bundle.js"></script>
+  </body>
+</html>
